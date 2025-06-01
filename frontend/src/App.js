@@ -77,10 +77,12 @@ function App() {
           limit: 50
         }
       });
-      setSearchResults(response.data.verses);
+      console.log("Search response:", response.data); // Debug log
+      setSearchResults(response.data.verses || []);
       setActiveTab("search");
     } catch (error) {
       console.error("Error searching verses:", error);
+      setSearchResults([]); // Clear results on error
     } finally {
       setLoading(false);
     }
