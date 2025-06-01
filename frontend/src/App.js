@@ -260,7 +260,7 @@ function App() {
                 />
                 <button
                   onClick={searchVerses}
-                  disabled={loading}
+                  disabled={loading || !searchQuery.trim()}
                   className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 font-medium"
                 >
                   {loading ? "Searching..." : "Search"}
@@ -268,14 +268,37 @@ function App() {
               </div>
             </div>
             
-            {searchResults.length > 0 && (
-              <div className="max-w-4xl mx-auto">
-                <p className="text-gray-600 mb-4">Found {searchResults.length} results</p>
-                {searchResults.map((verse, index) => (
-                  <VerseCard key={index} verse={verse} />
-                ))}
-              </div>
-            )}
+            {/* Search Results */}
+            <div className="max-w-4xl mx-auto">
+              {loading && (
+                <div className="text-center py-8">
+                  <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                  <p className="mt-4 text-gray-600">Searching verses...</p>
+                </div>
+              )}
+              
+              {!loading && searchResults && searchResults.length > 0 && (
+                <>
+                  <p className="text-gray-600 mb-4">Found {searchResults.length} results for "{searchQuery}"</p>
+                  {searchResults.map((verse, index) => (
+                    <VerseCard key={`search-${verse.id}-${index}`} verse={verse} />
+                  ))}
+                </>
+              )}
+              
+              {!loading && searchQuery && searchResults && searchResults.length === 0 && (
+                <div className="text-center py-8">
+                  <p className="text-gray-600">No results found for "{searchQuery}"</p>
+                  <p className="text-sm text-gray-500 mt-2">Try different keywords or check your spelling</p>
+                </div>
+              )}
+              
+              {!searchQuery && !loading && (
+                <div className="text-center py-8">
+                  <p className="text-gray-600">Enter a search term to find verses</p>
+                </div>
+              )}
+            </div>
           </div>
         )}
 
